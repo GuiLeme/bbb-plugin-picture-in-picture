@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { ActionButtonDropdownOption, BbbPluginSdk, FloatingWindow } from 'bigbluebutton-html-plugin-sdk';
+import { BbbPluginSdk, FloatingWindow, MediaAreaOption } from 'bigbluebutton-html-plugin-sdk';
 import { defineMessages } from 'react-intl';
 import { useI18n } from '../common/hooks';
 import Pip from '../plugin-pip/component';
@@ -54,10 +54,10 @@ function MainComponent({ pluginUuid, active }: MainComponentProps): React.ReactN
   if (isPipSupported) {
     const activateLabel = intl?.formatMessage(intlMessages.activate) || 'Activate PiP Window';
     const deactivateLabel = intl?.formatMessage(intlMessages.deactivate) || 'Deactivate PiP Window';
-    pluginApi.setActionButtonDropdownItems([
-      new ActionButtonDropdownOption({
+    pluginApi.setMediaAreaItems([
+      new MediaAreaOption({
         allowed: true,
-        icon: pipActive ? 'desktop_off' : 'desktop',
+        icon: { iconName: pipActive ? 'desktop_off' : 'desktop' },
         label: pipActive ? deactivateLabel : activateLabel,
         onClick: () => {
           pipActiveRef.current = !pipActiveRef.current;
@@ -192,8 +192,9 @@ function MainComponent({ pluginUuid, active }: MainComponentProps): React.ReactN
     if (!isPipSupported || !pipActive) return undefined;
 
     if (showFocusWarning) {
-      const actionsButton = document.querySelector('[data-test="actionsButton"]');
-      const rect = actionsButton.getBoundingClientRect();
+      const mediaAreaButton = document.querySelector('[data-test="mediaAreaButton"]');
+      if (!mediaAreaButton) return undefined;
+      const rect = mediaAreaButton.getBoundingClientRect();
       pluginApi.setFloatingWindows([
         new FloatingWindow({
           id: 'plugin-pip-focus-warning',
