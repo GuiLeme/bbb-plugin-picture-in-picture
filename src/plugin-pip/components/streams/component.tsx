@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { PluginApi } from 'bigbluebutton-html-plugin-sdk';
-import {
-  usePresentationSnapshot,
-  useScreenshare,
-  useVideoStreams,
-} from './hooks';
+import { useVideoStreams, useScreenshare, usePresentationSnapshot } from './hooks';
 import WebcamItem from './webcam-item';
 import Video from './video';
 import Skeleton from '../ui/skeleton';
