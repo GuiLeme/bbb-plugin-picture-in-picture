@@ -48,18 +48,41 @@ test.describe('Picture-in-Picture Plugin - minimised presentation', () => {
     await context?.close();
   });
 
-  test('hides the slide tile while the presentation is minimised', async () => {
+  test('fills the grid with the webcam and disables swap while presentation is minimised', async () => {
     await modPage.page.waitForSelector(e.whiteboard, { timeout: ELEMENT_WAIT_LONGER_TIME });
+    await modPage.shareWebcam();
     const pipPage = await openPipWindow(context, modPage.page);
     const slide = pipPage.locator('.pip-slide-item');
+    const grid = pipPage.locator(e.pipWebcams);
 
     await expect(slide).toBeVisible({ timeout: ELEMENT_WAIT_LONGER_TIME });
+    await expect(pipPage.getByRole('button', { name: 'Unfocus content' })).toBeEnabled();
 
     await modPage.page.click('[data-test="minimizePresentation"]');
     await expect(slide).toHaveCount(0, { timeout: ELEMENT_WAIT_LONGER_TIME });
+    await expect(pipPage.locator(e.pipVideo)).toBeVisible();
+    await expect.poll(() => grid.evaluate((element) => (
+      (element as HTMLElement).style.gridTemplateColumns
+    ))).toBe('repeat(1, 1fr)');
+    await expect(pipPage.locator('.pip-content-focused')).toHaveCount(0);
+    await expect(pipPage.getByRole('button', { name: 'Focus content' })).toBeDisabled();
 
     await modPage.page.click('[data-test="restorePresentation"]');
     await expect(slide).toBeVisible({ timeout: ELEMENT_WAIT_LONGER_TIME });
+    await expect(slide).toHaveClass(/pip-content-focused/);
+    await expect(pipPage.getByRole('button', { name: 'Unfocus content' })).toBeEnabled();
+
+    await setTabHidden(modPage.page, false);
+  });
+
+  test('keeps the PiP controls open when minimised without a webcam', async () => {
+    await modPage.page.waitForSelector(e.whiteboard, { timeout: ELEMENT_WAIT_LONGER_TIME });
+    const pipPage = await openPipWindow(context, modPage.page);
+
+    await modPage.page.click('[data-test="minimizePresentation"]');
+
+    await expect(pipPage.locator(e.pipCameras)).toHaveCount(0);
+    await expect(pipPage.getByRole('button', { name: 'Focus content' })).toBeDisabled();
 
     await setTabHidden(modPage.page, false);
   });
