@@ -69,8 +69,7 @@ test.describe('Picture-in-Picture Plugin - minimised presentation', () => {
 
     await modPage.page.click('[data-test="restorePresentation"]');
     await expect(slide).toBeVisible({ timeout: ELEMENT_WAIT_LONGER_TIME });
-    await expect(slide).toHaveClass(/pip-content-focused/);
-    await expect(pipPage.getByRole('button', { name: 'Unfocus content' })).toBeEnabled();
+    await expect(pipPage.getByRole('button', { name: 'Focus content' })).toBeEnabled();
 
     await setTabHidden(modPage.page, false);
   });

@@ -41,7 +41,6 @@ export function LayoutProvider({
   const pipWindow = usePipWindow();
   const [contentFocused, setContentFocused] = React.useState<boolean | null>(null);
   const [layout, setLayout] = React.useState<Pick<LayoutContext, 'content' | 'actions'> | null>(null);
-  const previousContentAvailable = React.useRef<boolean | null>(null);
 
   const loading = [
     hasCameras, hasScreenshare, hasPresentation, presenter, moderator,
@@ -58,16 +57,12 @@ export function LayoutProvider({
 
   React.useEffect(() => {
     if (typeof hasScreenshare === 'boolean'
-      && typeof hasPresentation === 'boolean') {
-      const contentAvailable = hasScreenshare || hasPresentation;
-      if (!contentAvailable) {
-        setContentFocused(false);
-      } else if (previousContentAvailable.current === false) {
-        setContentFocused(initialFocused);
-      }
-      previousContentAvailable.current = contentAvailable;
+      && typeof hasPresentation === 'boolean'
+      && !hasScreenshare
+      && !hasPresentation) {
+      setContentFocused(false);
     }
-  }, [hasScreenshare, hasPresentation, initialFocused]);
+  }, [hasScreenshare, hasPresentation]);
 
   React.useEffect(() => {
     if (hasCameras == null || hasScreenshare == null) return undefined;
