@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { PluginApi } from 'bigbluebutton-html-plugin-sdk';
 import {
-  usePresentationAreaOpen,
   usePresentationSnapshot,
   useScreenshare,
   useVideoStreams,
@@ -120,8 +119,7 @@ function StreamsComponent({
   } = useScreenshare(pluginApi);
 
   const isSharing = Boolean(screenshareData?.screenshare[0]?.stream);
-  const isPresentationAreaOpen = usePresentationAreaOpen(pluginApi);
-  const slideEnabled = Boolean(hasPresentation) && !isSharing && isPresentationAreaOpen;
+  const slideEnabled = Boolean(hasPresentation) && !isSharing;
   const { image: slideImage, isLoading: slideLoading } = usePresentationSnapshot(
     pluginApi,
     slideEnabled,
