@@ -10,8 +10,6 @@ A plugin that starts up a picture-in-picture window with webcams and screen shar
 
 When the server's camera bridge is LiveKit and adaptive stream is enabled with its default background-pause behaviour, cameras rendered in the picture-in-picture window may freeze a few seconds after the main BigBlueButton tab is backgrounded. Audio and the main window are not affected; only the mirrored camera tiles stop updating.
 
-This happens because the plugin mirrors the client's video stream into its own tiles, and `livekit-client` has no way to know those tiles exist. It considers the camera not visible and asks the server to stop sending while the tab is in the background.
-
 Server administrators can work around it by setting `pauseVideoInBackground` to `false` under `public.media.livekit.roomOptions.adaptiveStream` in `/etc/bigbluebutton/bbb-html5.yml`:
 
 ```yaml
@@ -29,7 +27,7 @@ With the pause disabled, camera streams keep flowing while the tab is background
 
 This will be fixed properly once the plugin SDK exposes an API to attach a camera track directly to a plugin-owned video element.
 
-Tracking issue: <!-- TODO: link the SDK issue once it is filed upstream -->
+Tracking issue: https://github.com/bigbluebutton/bigbluebutton-html-plugin-sdk/issues/290
 
 ## Building the Plugin
 
