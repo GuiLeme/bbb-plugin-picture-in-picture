@@ -29,6 +29,7 @@ function PluginPip({ intl, pluginApi, pipWindow }: PluginPipProps): React.ReactN
 
   const presenter = currentUser?.presenter;
   const moderator = currentUser?.role && currentUser.role === 'MODERATOR';
+  const cameraCount = webcams?.user_camera?.length ?? 0;
   const hasWebcams = webcams?.user_camera && Boolean(webcams?.user_camera.length);
   const hasScreenshare = screenshare?.screenshare && Boolean(screenshare?.screenshare?.length);
   const hasPresentation = presentation === undefined
@@ -39,6 +40,7 @@ function PluginPip({ intl, pluginApi, pipWindow }: PluginPipProps): React.ReactN
     <PipWindowProvider pipWindow={pipWindow}>
       <LayoutProvider
         hasCameras={hasWebcams}
+        cameraCount={cameraCount}
         hasScreenshare={hasScreenshare}
         hasPresentation={hasPresentation}
         presenter={presenter}
