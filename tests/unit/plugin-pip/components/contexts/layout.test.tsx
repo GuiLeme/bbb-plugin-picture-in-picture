@@ -26,6 +26,7 @@ function LayoutHarness({ hasPresentation, hasCameras = true }: LayoutHarnessProp
     <PipWindowProvider pipWindow={window}>
       <LayoutProvider
         hasCameras={hasCameras}
+        cameraCount={hasCameras ? 1 : 0}
         hasScreenshare={false}
         hasPresentation={hasPresentation}
         presenter
